@@ -3,25 +3,26 @@ pragma solidity >=0.8.0;
 
 /// ============ Imports ============
 
-import { ERC20 } from "@solmate/tokens/ERC20.sol"; // Solmate: ERC20
-import { MerkleProof } from "@openzeppelin/utils/cryptography/MerkleProof.sol"; // OZ: MerkleProof
+import "@openzeppelin/contracts/utils/cryptography/MerkleProof.sol";
+import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/token/ERC20/ERC20.sol";
+import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/access/Ownable.sol";
 
 /// @title MerkleClaimERC20
 /// @notice ERC20 claimable by members of a merkle tree
-/// @author Anish Agnihotri <contact@anishagnihotri.com>
-/// @dev Solmate ERC20 includes unused _burn logic that can be removed to optimize deployment cost
-contract MerkleClaimERC20 is ERC20 {
+/// @author Michael Maher
+contract MerkleClaimERC20 is Ownable{
 
   /// ============ Immutable storage ============
 
   /// @notice ERC20-claimee inclusion root
-  bytes32 public immutable merkleRoot;
-
+  bytes32 public merkleRoot;
+  address public sender;
+  IERC20  public token;
   /// ============ Mutable storage ============
 
   /// @notice Mapping of addresses who have claimed tokens
   mapping(address => bool) public hasClaimed;
-
+  
   /// ============ Errors ============
 
   /// @notice Thrown if address has already claimed
@@ -30,19 +31,15 @@ contract MerkleClaimERC20 is ERC20 {
   error NotInMerkle();
 
   /// ============ Constructor ============
-
-  /// @notice Creates a new MerkleClaimERC20 contract
-  /// @param _name of token
-  /// @param _symbol of token
-  /// @param _decimals of token
-  /// @param _merkleRoot of claimees
+  /// sets instance of token, address sending airdrop, and merkle root
   constructor(
-    string memory _name,
-    string memory _symbol,
-    uint8 _decimals,
+    address _tokenAddr,
+    address _sender,
     bytes32 _merkleRoot
-  ) ERC20(_name, _symbol, _decimals) {
-    merkleRoot = _merkleRoot; // Update root
+  )   {
+    token = IERC20(_tokenAddr);
+    sender = _sender;
+    merkleRoot = _merkleRoot;
   }
 
   /// ============ Events ============
@@ -54,11 +51,23 @@ contract MerkleClaimERC20 is ERC20 {
 
   /// ============ Functions ============
 
-  /// @notice Allows claiming tokens if address is part of merkle tree
+  function updateRoot(bytes32 _merkleRoot) public onlyOwner {
+    merkleRoot = _merkleRoot; // Update root
+  }
+
+  function updateSender(address _sender) public onlyOwner {
+    sender = _sender;
+  }
+
+  function updateInstance(address _tokenAddr) public onlyOwner {
+    token = IERC20(_tokenAddr);
+  }
+
+  /// Allows claiming tokens if address is part of merkle tree
   /// @param to address of claimee
   /// @param amount of tokens owed to claimee
   /// @param proof merkle proof to prove address and amount are in tree
-  function claim(address to, uint256 amount, bytes32[] calldata proof) external {
+  function claim(address to, uint256 amount, bytes32[] calldata proof) public {
     // Throw if address has already claimed tokens
     if (hasClaimed[to]) revert AlreadyClaimed();
 
@@ -70,8 +79,9 @@ contract MerkleClaimERC20 is ERC20 {
     // Set address to claimed
     hasClaimed[to] = true;
 
-    // Mint tokens to address
-    _mint(to, amount);
+    // Transfer tokens to address
+    require(token.transferFrom(sender, to, amount), "fail send");
+
 
     // Emit claim event
     emit Claim(to, amount);
