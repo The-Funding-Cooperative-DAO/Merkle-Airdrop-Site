@@ -1,6 +1,6 @@
 # Merkle Airdrop Starter
 
-Quickly bootstrap an ERC20 token airdrop to a Merkle tree of recipients.
+Allows whitelisted addresses to participate in FCDAO and member airdrops, verified by a Merkle tree.
 
 Steps:
 
