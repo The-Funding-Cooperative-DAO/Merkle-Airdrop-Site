@@ -14,7 +14,7 @@ cd generator/
 # Install dependencies
 npm install
 
-#Run script to take CSV file and create JSON object
+#Run script to take ./src/airdrop.csv and create JSON object
 npm run go
 
 # Copy new-config.json to config.json
