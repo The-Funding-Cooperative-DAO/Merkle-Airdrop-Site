@@ -24,7 +24,7 @@ npm run start
 ```
 
 Outputs a `merkle.json`, in the following format,
-Copy "root" to Merkle Smart contract and update for each airdrop:
+copy "root" to Merkle Smart contract and update for each airdrop:
 
 ```json
 {
