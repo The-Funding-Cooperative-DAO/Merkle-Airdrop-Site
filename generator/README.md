@@ -14,8 +14,10 @@ cd generator/
 # Install dependencies
 npm install
 
-# Edit config.json
-vim config.json
+#Run script to take csv file and create JSON object
+npm run go
+
+# Copy new-config.json to config.json
 
 # Run script
 npm run start
