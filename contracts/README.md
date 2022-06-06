@@ -1,6 +1,6 @@
 # MerkleClaimERC20
 
-ERC20 token claimable by members of a [Merkle tree](https://en.wikipedia.org/wiki/Merkle_tree). Useful for conducting Airdrops. Utilizes [Solmate ERC20](https://github.com/Rari-Capital/solmate/blob/main/src/tokens/ERC20.sol) for modern ERC20 token implementation.
+ERC20 token claimable by members of a [Merkle tree](https://en.wikipedia.org/wiki/Merkle_tree). Useful for conducting Airdrops. Utilizes "@openzeppelin/utils/cryptography/MerkleProof.sol" for Merkle proof verification.
 
 ## Test
 
@@ -27,7 +27,7 @@ forge test --root . -vvvv
 
 Follow the `forge create` instructions ([CLI README](https://github.com/gakonst/foundry/blob/master/cli/README.md#build)) to deploy your contracts or use [Remix](https://remix.ethereum.org/).
 
-You can specify the token `name`, `symbol`, `decimals`, and airdrop `merkleRoot` upon deploy.
+You can specify the token address, sender, and airdrop `merkleRoot` upon deploy.
 
 ## Credits
 
