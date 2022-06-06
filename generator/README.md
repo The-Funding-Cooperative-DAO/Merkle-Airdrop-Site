@@ -1,6 +1,6 @@
 # Generator
 
-Given a `decimals` count for a token and list of airdrop recipients, outputs:
+Given a `decimals` count for a token and list of airdrop recipients via CSV file outputs:
 
 1. A merkle root for use in a MerkleClaimERC20 contract
 2. A merkle tree for use in a front-end
@@ -14,7 +14,7 @@ cd generator/
 # Install dependencies
 npm install
 
-#Run script to take csv file and create JSON object
+#Run script to take CSV file and create JSON object
 npm run go
 
 # Copy new-config.json to config.json
@@ -23,7 +23,8 @@ npm run go
 npm run start
 ```
 
-Outputs a `merkle.json`, in the following format:
+Outputs a `merkle.json`, in the following format,
+Copy "root" to Merkle Smart contract and update for each airdrop:
 
 ```json
 {
