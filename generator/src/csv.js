@@ -27,14 +27,19 @@ async function exportObj() {
     let addr = String(splits[0])
     let num = Number(splits[1]);
 
-    // Resolve address
-    let hex = await provider.resolveName(addr);
-    // Do something 
-    if(hex){
-      console.log("Resolved: " + addr + " -> " + hex);
+    if(addr.trim().endsWith(".eth")){
+      // Resolve address
+      let hex = await provider.resolveName(addr);
+      // Do something 
+      if(hex){
+        console.log("Resolved: " + addr + " -> " + hex);
+      }else{
+        console.log("Failed to Resolve: " + addr);
+      }  
     }else{
-      console.log("Failed to Resolve: " + addr);
+      console.log("Not ENS address: " + addr)
     }
+    
 
     a[splits[0]] = num;
     index++;
