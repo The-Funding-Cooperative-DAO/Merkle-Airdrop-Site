@@ -14,6 +14,8 @@ async function exportObj() {
     crlfDelay: Infinity
   });
 
+  // We're using infura.io as provider. Optionally use Geth or Parity or something else.
+  // If you don't specify a url, Ethers connects to the default (i.e. ``http:/\/localhost:8545``)
   // TODO: move endpoint const to config
   const infraEndpoint = "https://mainnet.infura.io/v3/10d0877f21884791bc511c6425ccaff2";
   // Access network through free infura.io account
