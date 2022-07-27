@@ -6,9 +6,12 @@ const ethers = require('ethers');
 
 async function exportObj() {
 
+  const inputCSVFileName = './src/airdrop.csv';
+  const outputJSONFileName = "../generator/new-config.json";
+
   let content = {};
   let a = {};
-  const fileStream = fs.createReadStream('./src/airdrop.csv');
+  const fileStream = fs.createReadStream(inputCSVFileName);
   const rl = readline.createInterface({
     input: fileStream,
     crlfDelay: Infinity
@@ -27,28 +30,24 @@ async function exportObj() {
     let addr = String(splits[0])
     let num = Number(splits[1]);
 
-    if(addr.trim().endsWith(".eth")){
-      // Resolve address
-      let hex = await provider.resolveName(addr);
-      // Do something 
-      if(hex){
-        console.log("Resolved: " + addr + " -> " + hex);
-      }else{
-        console.log("Failed to Resolve: " + addr);
-      }  
+    // Resolve address
+    // No need to check if its a correct address - infura does it for us
+    let hex = await provider.resolveName(addr);
+    // Do something 
+    if(hex){
+      console.log("Resolved: " + addr + " -> " + hex);
+      a[hex] = num;
     }else{
-      console.log("Not ENS address: " + addr)
-    }
+      console.log("Failed to Resolve: " + addr);
+    }  
     
-
-    a[splits[0]] = num;
     index++;
   }
 
   content.airdrop = a;
   const result = JSON.stringify(content);
   console.log(result)
-  fs.writeFileSync("../generator/new-config.json", result);
+  fs.writeFileSync(outputJSONFileName, result);
 }
 
 exportObj();
