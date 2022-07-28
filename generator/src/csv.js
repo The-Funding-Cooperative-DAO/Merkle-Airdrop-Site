@@ -45,6 +45,7 @@ async function exportObj() {
   }
 
   content.airdrop = a;
+  content.decimals = 18;
   const result = JSON.stringify(content);
   console.log(result)
   fs.writeFileSync(outputJSONFileName, result);
