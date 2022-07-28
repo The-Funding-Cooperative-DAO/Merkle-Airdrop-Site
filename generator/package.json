@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Script to generate Merkle tree root from inputs",
   "scripts": {
+    "go": "node src/csv.js",
     "start": "ts-node src/app.ts"
   },
   "author": "Anish Agnihotri",
